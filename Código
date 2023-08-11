@@ -1,0 +1,81 @@
+######################## Descarga de datos de asegurados ########################
+
+##El directorio puede cambiar
+
+setwd("D:")
+
+#Paquetes y ajustes previos
+  rm(list=ls())
+  pacman::p_load(downloader, tidyverse, RCurl, beepr, tictoc)
+
+#################################################################################
+#################################################################################
+  
+    
+{
+
+    #Directorio general
+  dir<-setwd("D:")
+  #Se carga la tabla con las ligas para accesar a los datos
+  links<-read_csv("Tabla urls historicas 2.csv")
+  tail(links)
+
+} ## Primer codigo
+
+######################## 200i ########################
+{
+  # Ajustes
+  x<- "200i" #######cambia anualmente
+  links_mensuales<- links %>%
+    filter(Year==x)%>%
+    select(Year,Month,URL)
+  #Escogemos como se guardará el archivo
+  
+  y_i<- x  #Año
+  m_i<-"01" #Mes
+  d_i<-"01" #Dia
+  dir.create(y_i,showWarnings = T) #Se crea el directorio correspondiente al año
+
+  
+  # Vector de meses correspondientes al año
+  year<-seq(as.Date( paste0(y_i,"/",m_i,"/",d_i) ), by = "month", length.out = 12)
+  asg<-"asg-" #nombre inicial del archivo
+  estension<-".csv" #extensión
+  #se crea la lista general de archivos a descargar
+  lista_general<-paste0(asg,year,estension)#el nombre de todos los archivos del año
+  dir_completa_de_guardado<-paste0(y_i,"/",lista_general)#se crea la dirección completa donde se guardarán los archiuvos
+  dir_completa_de_guardado<-as.data.frame(dir_completa_de_guardado)
+  
+} ##Segundo codigo
+  
+  #Descarga anual de los datos
+  {
+  
+    # enero
+    download.file(url= links_mensuales$URL[1] ,destfile=dir_completa_de_guardado[1,1]  , method = "libcurl")
+    # febrero
+    download.file(url= links_mensuales$URL[2] ,destfile=dir_completa_de_guardado[2,1]  , method = "libcurl")
+    # marzo
+    download.file(url= links_mensuales$URL[3] ,destfile=dir_completa_de_guardado[3,1]  , method = "libcurl")
+    # abril
+    download.file(url= links_mensuales$URL[4] ,destfile=dir_completa_de_guardado[4,1]  , method = "libcurl")
+    # mayo
+    download.file(url= links_mensuales$URL[5] ,destfile=dir_completa_de_guardado[5,1]  , method = "libcurl")
+    # junio
+    download.file(url= links_mensuales$URL[6] ,destfile=dir_completa_de_guardado[6,1]  , method = "libcurl")
+    # julio
+    download.file(url= links_mensuales$URL[7] ,destfile=dir_completa_de_guardado[7,1]  , method = "libcurl")
+    # agosto
+    download.file(url= links_mensuales$URL[8] ,destfile=dir_completa_de_guardado[8,1]  , method = "libcurl")
+    # septiembre
+    download.file(url= links_mensuales$URL[9] ,destfile=dir_completa_de_guardado[9,1]  , method = "libcurl")
+    # octubre
+    download.file(url= links_mensuales$URL[10] ,destfile=dir_completa_de_guardado[10,1]  , method = "libcurl")
+    # noviembre
+    download.file(url= links_mensuales$URL[11] ,destfile=dir_completa_de_guardado[11,1]  , method = "libcurl")
+    # diciembre
+    download.file(url= links_mensuales$URL[12] ,destfile=dir_completa_de_guardado[12,1]  , method = "libcurl")
+    
+  } ##Tercer codigo
+
+#El código finaliza y se puede cambiar el año i y el directorio, es importante ver que se puede crear un loop o generar un código que lo descargue anualmente sin cambiar el año
